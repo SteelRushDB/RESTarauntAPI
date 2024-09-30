@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTarauntAPI", "RESTarauntAPI\RESTarauntAPI.csproj", "{8D21A120-B5F9-4559-AF49-391F1E443499}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D21A120-B5F9-4559-AF49-391F1E443499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D21A120-B5F9-4559-AF49-391F1E443499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D21A120-B5F9-4559-AF49-391F1E443499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D21A120-B5F9-4559-AF49-391F1E443499}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

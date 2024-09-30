@@ -1,0 +1,6 @@
+@RESTarauntAPI_HostAddress = http://localhost:5219
+
+GET {{RESTarauntAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
