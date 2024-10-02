@@ -23,10 +23,18 @@ public class AppDbContext : DbContext
         {
             if (entry.State == EntityState.Modified)
             {
-                // Если объект изменён, обновляем время
+                entry.Entity.UpdatedAt = DateTime.Now;  // Если объект изменён, обновляем время
+            }
+        }
+        
+        foreach (var entry in ChangeTracker.Entries<Order>())
+        {
+            if (entry.State == EntityState.Modified)
+            {
                 entry.Entity.UpdatedAt = DateTime.Now;
             }
         }
+        
         return base.SaveChangesAsync(cancellationToken);
     }
 }

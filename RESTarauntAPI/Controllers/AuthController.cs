@@ -35,6 +35,10 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Email is already taken."); // Проверка, есть ли такой email
         }
+        if (!_userService.IsRoleValid(registrationDto.Role))
+        {
+            return BadRequest("There is not such role."); // Проверка, что role выбрана из доступных
+        }
 
         var user = await _userService.RegisterUserAsync(registrationDto); // Регистрация пользователя
         return Ok(new 

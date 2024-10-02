@@ -8,5 +8,4 @@ public class Dish
     public decimal Price { get; set; }
     public int QuantityAvailable { get; set; }
     
-    public ICollection<OrderDish> OrderDishes { get; set; }  // Связь с таблицей OrderDish
 }

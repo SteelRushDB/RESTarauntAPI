@@ -22,6 +22,7 @@ public class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
         
         builder.Services.AddScoped<UserService>(); // Регистрируем сервис для работы с пользователями
+        builder.Services.AddScoped<OrderService>();
         
         builder.Services.AddControllers();
         
