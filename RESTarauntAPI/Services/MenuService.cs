@@ -57,4 +57,12 @@ public class MenuService
         
         return dish;
     }
+
+    public async Task DeleteDish(int dishId)
+    {
+        Dish dish = _context.Dishes.Find(dishId);
+        _context.Dishes.Remove(dish);
+        
+        await _context.SaveChangesAsync(); 
+    }
 }

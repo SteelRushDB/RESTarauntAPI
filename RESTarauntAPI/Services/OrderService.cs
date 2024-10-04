@@ -41,4 +41,8 @@ public class OrderService
         _context.OrderDishes.Add(orderDish);
     }
     
+    public List<Order> GetAllOrders()
+    {
+        return _context.Orders.ToList();
+    }
 }

@@ -23,6 +23,7 @@ public class OrdersController: ControllerBase
         _menuService = menuService;
     }
 
+    //Create
     [Authorize]
     [HttpPost("new_order")]
     public async Task<IActionResult> CreateOrder([FromBody] NewOrderDTO newOrderDto)
@@ -45,6 +46,11 @@ public class OrdersController: ControllerBase
         foreach (var orderDishDto in newOrderDto.OrderDishDtos)
         {
             var dish = await _orderService.FindDishByIdAsync(orderDishDto.DishId);
+
+            if (orderDishDto.Quantity <= 0)
+            {
+                return BadRequest(new { message = $"{dish?.Name ?? "Unknown"} указан в недопустимом количестве" });
+            }
             
             if (dish == null || dish.QuantityAvailable < orderDishDto.Quantity)
             {
@@ -76,8 +82,8 @@ public class OrdersController: ControllerBase
         });
     }
     
-    
-    [Authorize]
+    //Delete == cancel
+    [Authorize(Roles = "Admin, Manager, Employee")]
     [HttpPut("cancel_order/{orderId}")]
     public async Task<IActionResult> CancelOrder(int orderId)
     {
@@ -96,9 +102,27 @@ public class OrdersController: ControllerBase
         return Ok(new { message = "Order cancelled successfully." });
     }
 
+    //Read ALL (info)
+    [Authorize(Roles = "Admin, Manager, Employee")]
+    [HttpGet("orders_info")]
+    public async Task<IActionResult> OrderInfo()
+    {
+        var orders = _orderService.GetAllOrders(); 
+        if (orders == null || orders.Count == 0)
+        {
+            return NotFound(new { message = "There was no any orders" });
+        }
+        
+        return Ok(new
+        {
+            message = $"Orders found:",
+            orders,
+        });
+    }
     
-    [Authorize]
-    [HttpGet("order_info/{orderId}")]
+    //Read (info)
+    [Authorize(Roles = "Admin, Manager, Employee")]
+    [HttpGet("orders_info/{orderId}")]
     public async Task<IActionResult> OrderInfo(int orderId)
     {
         var order = await _orderService.FindOrderByIdAsync(orderId);
@@ -110,9 +134,9 @@ public class OrdersController: ControllerBase
         return Ok(new
         {
             order,
+            order.OrderDishes,
             message = $"Order status:{order.Status}"
         });
     }
-    
     
 }

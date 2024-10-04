@@ -82,6 +82,7 @@ public class AuthController : ControllerBase
 
         var claims = new[]
         {
+            new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Role, user.Role) // Добавляем роль пользователя в токен
@@ -104,12 +105,18 @@ public class AuthController : ControllerBase
     
     
     
-    [Authorize] // Требуем авторизацию через JWT
+    [Authorize] 
     [HttpGet("info")]
     public IActionResult GetUserInfo()
     {
         // Извлекаем клеймы из токена
         var userClaims = User.Claims;
+        
+        var userName = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        if (userName == null)
+        {
+            return Unauthorized(new { message = "UserName not found in token" });
+        }
         
         // Получаем email и роль из клеймов
         var email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value; // Это мы поместили в JwtRegisteredClaimNames.Sub
@@ -129,6 +136,7 @@ public class AuthController : ControllerBase
         // Возвращаем информацию о пользователе
         return Ok(new
         {
+            UserName = userName,
             Email = email,
             Role = role
         });
