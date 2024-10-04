@@ -18,6 +18,7 @@ public class Order
     
     public Order()
     {
+        OrderDishes = new List<OrderDish>();
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }

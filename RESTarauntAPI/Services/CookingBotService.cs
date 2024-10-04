@@ -29,9 +29,11 @@ public class CookingBotService: BackgroundService
         orderToCook.Status = "Processing";
         await _context.SaveChangesAsync();
         
-        await Task.Delay(TimeSpan.FromSeconds(10)); // Имитация времени обработки заказа
+        await Task.Delay(TimeSpan.FromSeconds(20)); // Имитация времени обработки заказа
 
         orderToCook.Status = "Ready";
         await _context.SaveChangesAsync();
     }
 }
+
+//TODO хз, не работает походу

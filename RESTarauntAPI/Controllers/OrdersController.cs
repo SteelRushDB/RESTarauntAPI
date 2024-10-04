@@ -14,13 +14,13 @@ public class OrdersController: ControllerBase
 {
     private readonly OrderService _orderService;
     private readonly UserService _userService;
-    private readonly IConfiguration _configuration;
+    private readonly MenuService _menuService;
     
-    public OrdersController(OrderService orderService, UserService userService, IConfiguration configuration)
+    public OrdersController(OrderService orderService, UserService userService, MenuService menuService)
     {
         _orderService = orderService;
         _userService = userService;
-        _configuration = configuration;
+        _menuService = menuService;
     }
 
     [Authorize]
@@ -58,10 +58,13 @@ public class OrdersController: ControllerBase
                 Quantity = orderDishDto.Quantity,
                 Price = dish.Price
             };
+
+            dish.QuantityAvailable -= orderDishDto.Quantity; //уменьшение доступных
+            await _menuService.UpdateOrAddDishToDbAsync(dish);
             
             order.OrderDishes.Add(orderDish);
-           
             _orderService.AddOrderDishInDb(orderDish);
+            
         }
 
         await _orderService.AddOrderInDbAsync(order);
@@ -72,9 +75,8 @@ public class OrdersController: ControllerBase
             OrderId = order.Id
         });
     }
-
-
-
+    
+    
     [Authorize]
     [HttpPut("cancel_order/{orderId}")]
     public async Task<IActionResult> CancelOrder(int orderId)
@@ -91,6 +93,26 @@ public class OrdersController: ControllerBase
         orderToCancel.Status = "Canceled";
         await _orderService.SaveDb();
         
-        return Ok(new { message = "Order cancelled successfully" });
+        return Ok(new { message = "Order cancelled successfully." });
     }
+
+    
+    [Authorize]
+    [HttpGet("order_info/{orderId}")]
+    public async Task<IActionResult> OrderInfo(int orderId)
+    {
+        var order = await _orderService.FindOrderByIdAsync(orderId);
+        if (order == null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+        
+        return Ok(new
+        {
+            order,
+            message = $"Order status:{order.Status}"
+        });
+    }
+    
+    
 }

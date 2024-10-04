@@ -23,6 +23,8 @@ public class Program
         
         builder.Services.AddScoped<UserService>(); // Регистрируем сервис для работы с пользователями
         builder.Services.AddScoped<OrderService>();
+        builder.Services.AddScoped<MenuService>();
+        builder.Services.AddScoped<CookingBotService>();
         
         builder.Services.AddControllers();
         

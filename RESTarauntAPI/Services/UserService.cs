@@ -76,4 +76,5 @@ public class UserService
         if (role == "Admin" || role == "Manager" || role == "Employee" || role == "User") return true;
         return false;
     }
+    
 }
